@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
 
+use clap::{Arg, App};
 use rand::{thread_rng, Rng};
 use reqwest::Url;
 use serde::Deserialize;
@@ -45,11 +46,11 @@ fn read_config(path: &str) -> Result<Config, std::io::Error> {
     Ok(config)
 }
 
-fn make_request(api_key: &String, query: &String) -> Result<Vec<Giphy>, reqwest::Error> {
+fn make_request(api_key: &str, query: &str) -> Result<Vec<Giphy>, reqwest::Error> {
     let url = Url::parse_with_params("https://api.giphy.com/v1/gifs/search", &[
         ("api_key", api_key),
         ("q", query),
-        ("limit", &String::from("25"))
+        ("limit", "25")
     ]).unwrap();
 
 
@@ -65,7 +66,19 @@ fn main() {
         Ok(config) => config,
     };
 
-    let query = String::from("thumbs up"); // TODO get from CLI param
+    let matches = App::new("Giphy")
+        .version("0.1.0")
+        .author("Michael Enger <michaelenger@live.com>")
+        .about("Searches giphy.com for an appropriate gif")
+        .arg(
+            Arg::with_name("query")
+                .help("Text to use when searching for a gif")
+                .required(true)
+                .index(1),
+        )
+        .get_matches();
+
+    let query = matches.value_of("query").unwrap();
 
     let results = match make_request(&config.api_key, &query) {
         Err(e) => panic!("Failed to retrieve gifs: {}", e),
