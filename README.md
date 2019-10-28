@@ -18,21 +18,17 @@ giphy "why the hell would you commit that??" | pbcopy
 
 ## Usage
 
-Copy (and then modify) the config file:
+You will need an API key from [Giphy](https://developers.giphy.com/).
+
+Then just run it 🤙
 
 ```shell
-cp config.example.toml config.toml
-```
-
-Run it 🤙
-
-```shell
-cargo run -- "your query goes here"
+cargo run -- --apikey "api key goes here" "search query goes here"
 ```
 
 ## TODO
 
-* Send in API Key with a CLI paramater
+* Add reading a config file from `~/.giphy` directory
 * Fetch latest featured gifs if no query paramater is passed
 * Keep a cache of previously used gifs and avoid duplicates
 * Allow for outputting a different

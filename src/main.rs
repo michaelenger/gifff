@@ -1,16 +1,9 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::prelude::*;
 
 use clap::{Arg, App};
 use rand::{thread_rng, Rng};
 use reqwest::Url;
 use serde::Deserialize;
-
-#[derive(Deserialize, Debug)]
-struct Config {
-    api_key: String,
-}
 
 #[derive(Deserialize, Debug)]
 struct Image {
@@ -36,16 +29,6 @@ struct GiphyResponse {
     data: Vec<Giphy>,
 }
 
-fn read_config(path: &str) -> Result<Config, std::io::Error> {
-    let mut file = File::open(path)?;
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?;
-
-    let config: Config = toml::from_str(&contents)?;
-
-    Ok(config)
-}
-
 fn make_request(api_key: &str, query: &str) -> Result<Vec<Giphy>, reqwest::Error> {
     let url = Url::parse_with_params("https://api.giphy.com/v1/gifs/search", &[
         ("api_key", api_key),
@@ -61,26 +44,27 @@ fn make_request(api_key: &str, query: &str) -> Result<Vec<Giphy>, reqwest::Error
 }
 
 fn main() {
-    let config: Config = match read_config("config.toml") {
-        Err(e) => panic!("Unable to read config.toml file: {}", e),
-        Ok(config) => config,
-    };
-
     let matches = App::new("Giphy")
         .version("0.1.0")
         .author("Michael Enger <michaelenger@live.com>")
         .about("Searches giphy.com for an appropriate gif")
-        .arg(
-            Arg::with_name("query")
-                .help("Text to use when searching for a gif")
-                .required(true)
-                .index(1),
-        )
+        .arg(Arg::with_name("api_key")
+            .short("k")
+            .long("apikey")
+            .value_name("key")
+            .help("API key for communicating with Giphy")
+            .takes_value(true)
+            .required(true))
+        .arg(Arg::with_name("query")
+            .help("Text to use when searching for a gif")
+            .required(true)
+            .index(1))
         .get_matches();
 
     let query = matches.value_of("query").unwrap();
+    let api_key = matches.value_of("api_key").unwrap();
 
-    let results = match make_request(&config.api_key, &query) {
+    let results = match make_request(&api_key, &query) {
         Err(e) => panic!("Failed to retrieve gifs: {}", e),
         Ok(giphys) => (giphys),
     };
