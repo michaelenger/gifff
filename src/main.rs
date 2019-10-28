@@ -101,5 +101,5 @@ fn main() {
         _ => panic!("Unable to get image URL"),
     };
 
-    println!("{}", url);
+    print!("{}", url);
 }
