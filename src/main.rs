@@ -33,7 +33,8 @@ fn make_request(api_key: &str, query: &str) -> Result<Vec<Giphy>, reqwest::Error
     let url = Url::parse_with_params("https://api.giphy.com/v1/gifs/search", &[
         ("api_key", api_key),
         ("q", query),
-        ("limit", "50")
+        ("limit", "50"),
+        ("rating", "g")
     ]).unwrap();
 
 
