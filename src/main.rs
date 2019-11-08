@@ -12,10 +12,16 @@ fn main() {
             Arg::with_name("api_key")
                 .short("k")
                 .long("apikey")
-                .value_name("key")
+                .value_name("KEY")
                 .help("API key for communicating with Giphy")
                 .takes_value(true)
                 .required(true),
+        )
+        .arg(
+            Arg::with_name("markdown")
+                .short("m")
+                .long("markdown")
+                .help("Wraps the resulting URL in some markdown"),
         )
         .arg(
             Arg::with_name("query")
@@ -27,6 +33,7 @@ fn main() {
 
     let query = matches.value_of("query").unwrap();
     let api_key = matches.value_of("api_key").unwrap();
+    let show_markdown = matches.is_present("markdown");
 
     let results = match giphy::search(&api_key, &query) {
         Err(e) => panic!("Failed to retrieve gifs: {}", e),
@@ -49,5 +56,9 @@ fn main() {
         _ => panic!("Unable to get image URL"),
     };
 
-    print!("{}", url);
+    if show_markdown {
+        print!("![R+]({})", url);
+    } else {
+        print!("{}", url);
+    }
 }
