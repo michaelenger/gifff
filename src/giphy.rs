@@ -36,7 +36,7 @@ pub fn search(api_key: &str, query: &str) -> Result<Vec<Giphy>, reqwest::Error> 
         &[
             ("api_key", api_key),
             ("q", query),
-            ("limit", "50"),
+            ("limit", "420"),
             ("rating", "g"),
         ],
     )
