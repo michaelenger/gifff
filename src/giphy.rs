@@ -30,14 +30,14 @@ struct GiphySearchResponse {
 }
 
 /// Search Giphy for gifs specified by the query
-pub fn search(api_key: &str, query: &str) -> Result<Vec<Giphy>, reqwest::Error> {
+pub fn search(api_key: &str, query: &str, rating: &str) -> Result<Vec<Giphy>, reqwest::Error> {
     let url = Url::parse_with_params(
         "https://api.giphy.com/v1/gifs/search",
         &[
             ("api_key", api_key),
             ("q", query),
             ("limit", "420"),
-            ("rating", "g"),
+            ("rating", rating),
         ],
     )
     .unwrap();

@@ -18,6 +18,17 @@ fn main() {
                 .required(true),
         )
         .arg(
+            Arg::with_name("rating")
+                .short("r")
+                .long("rating")
+                .value_name("RATING")
+                .help("API key for communicating with Giphy")
+                .takes_value(true)
+                .possible_values(&["g", "pg", "pg-13", "r"])
+                .default_value("g")
+                .required(true),
+        )
+        .arg(
             Arg::with_name("markdown")
                 .short("m")
                 .long("markdown")
@@ -33,9 +44,10 @@ fn main() {
 
     let query = matches.value_of("query").unwrap();
     let api_key = matches.value_of("api_key").unwrap();
+    let rating = matches.value_of("rating").unwrap();
     let show_markdown = matches.is_present("markdown");
 
-    let results = match giphy::search(&api_key, &query) {
+    let results = match giphy::search(&api_key, &query, &rating) {
         Err(e) => panic!("Failed to retrieve gifs: {}", e),
         Ok(giphys) => (giphys),
     };
