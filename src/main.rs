@@ -37,28 +37,34 @@ fn main() {
         .arg(
             Arg::with_name("query")
                 .help("Text to use when searching for a gif")
-                .required(true)
+                .required(false)
                 .index(1),
         )
         .get_matches();
 
-    let query = matches.value_of("query").unwrap();
     let api_key = matches.value_of("api_key").unwrap();
     let rating = matches.value_of("rating").unwrap();
     let show_markdown = matches.is_present("markdown");
 
-    let results = match giphy::search(&api_key, &query, &rating) {
+    //let query = matches.value_of("query");
+
+    let result = match matches.value_of("query") {
+        Some(query) => giphy::search(&api_key, &query, &rating),
+        None => giphy::trending(&api_key, &rating),
+    };
+
+    let gifs = match result {
         Err(e) => panic!("Failed to retrieve gifs: {}", e),
         Ok(giphys) => (giphys),
     };
 
-    if results.len() == 0 {
+    if gifs.len() == 0 {
         panic!("Giphy returned 0 results");
     }
 
-    let index: usize = thread_rng().gen_range(0, results.len());
+    let index: usize = thread_rng().gen_range(0, gifs.len());
 
-    let image = match results[index].images.get("original") {
+    let image = match gifs[index].images.get("original") {
         Some(image) => image,
         _ => panic!("Unable to extract original image"),
     };

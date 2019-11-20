@@ -12,6 +12,12 @@ Pipe that 🔥 straight to `pbcopy` and paste into your favourite ~colleague har
 giphy "why the hell would you commit that??" | pbcopy
 ```
 
+Alternatively you can be basic and just get a random trending gif:
+
+```shell
+giphy
+```
+
 ## Requirements
 
 * Rust 1.38
@@ -29,6 +35,5 @@ cargo run -- --apikey "api key goes here" "search query goes here"
 ## TODO
 
 * Add reading a config file from `~/.giphy` directory
-* Fetch latest featured gifs if no query paramater is passed
 * Keep a cache of previously used gifs and avoid duplicates
 * Allow for outputting a different quality URL

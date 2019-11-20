@@ -44,5 +44,22 @@ pub fn search(api_key: &str, query: &str, rating: &str) -> Result<Vec<Giphy>, re
 
     let body: GiphySearchResponse = reqwest::get(url)?.json()?;
 
-    return Ok(body.data);
+    Ok(body.data)
+}
+
+/// Get recent trending Giphys
+pub fn trending(api_key: &str, rating: &str) -> Result<Vec<Giphy>, reqwest::Error> {
+    let url = Url::parse_with_params(
+        "https://api.giphy.com/v1/gifs/trending",
+        &[
+            ("api_key", api_key),
+            ("limit", "420"),
+            ("rating", rating),
+        ],
+    )
+    .unwrap();
+
+    let body: GiphySearchResponse = reqwest::get(url)?.json()?;
+
+    Ok(body.data)
 }
