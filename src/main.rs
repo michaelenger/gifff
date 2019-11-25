@@ -1,9 +1,9 @@
 use clap::{App, Arg};
 use rand::{thread_rng, Rng};
-use std::collections::HashSet;
 
 mod giphy;
 
+/// Check whether a string is a positive number
 fn is_positive_number(val: String) -> Result<(), String> {
     match val.parse::<usize>() {
         Ok(_) => Ok(()),
@@ -71,22 +71,20 @@ fn main() {
         None => giphy::trending(&api_key, &rating),
     };
 
-    let gifs = match result {
+    let mut gifs = match result {
         Err(e) => panic!("Failed to retrieve gifs: {}", e),
         Ok(giphys) => (giphys),
     };
 
     if gifs.len() < number_of_gifs {
-        panic!("Giphy returned not enough results");
+        panic!("Giphy did not return enough results");
     }
 
-    let mut urls = HashSet::new();
-
-    // Not a super efficient way of doing this 🤷‍♀️
-    while urls.len() < number_of_gifs {
+    for _ in 0..number_of_gifs {
         let index: usize = thread_rng().gen_range(0, gifs.len());
 
-        let image = match gifs[index].images.get("original") {
+        let giphy = gifs.swap_remove(index);
+        let image = match giphy.images.get("original") {
             Some(image) => image,
             _ => panic!("Unable to extract original image"),
         };
@@ -96,12 +94,6 @@ fn main() {
             _ => panic!("Unable to get image URL"),
         };
 
-        if !urls.contains(url) {
-            urls.insert(url);
-        }
-    }
-
-    for url in urls {
         if show_markdown {
             println!("![R+]({})", url);
         } else {
