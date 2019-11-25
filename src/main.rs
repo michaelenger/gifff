@@ -5,7 +5,7 @@ mod giphy;
 
 fn main() {
     let matches = App::new("Giphy")
-        .version("0.1.0")
+        .version("0.2.1")
         .author("Michael Enger <michaelenger@live.com>")
         .about("Searches giphy.com for an appropriate gif")
         .arg(
@@ -22,7 +22,7 @@ fn main() {
                 .short("r")
                 .long("rating")
                 .value_name("RATING")
-                .help("API key for communicating with Giphy")
+                .help("Rating of the gifs to retrieve")
                 .takes_value(true)
                 .possible_values(&["g", "pg", "pg-13", "r"])
                 .default_value("g")
