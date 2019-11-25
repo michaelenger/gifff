@@ -31,6 +31,7 @@ giphy
 * `--apikey <KEY>` specify the API key
 * `--help` Show help text
 * `--markdown` Wrap the URL in some markdown useful for saying 👍 to pull requests
+* `--number <AMOUNT>` how many gifs to retrieve
 * `--rating <RATING>` specify the rating of the gif (based on the [rating list](https://developers.giphy.com/docs/optional-settings/#rating))
 * `--version` Prints version information
 

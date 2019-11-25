@@ -3,6 +3,13 @@ use rand::{thread_rng, Rng};
 
 mod giphy;
 
+fn is_positive_number(val: String) -> Result<(), String> {
+    match val.parse::<usize>() {
+        Ok(_) => Ok(()),
+        Err(_) => Err(String::from("must be a positive number"))
+    }
+}
+
 fn main() {
     let matches = App::new("Giphy")
         .version("0.2.1")
@@ -29,6 +36,17 @@ fn main() {
                 .required(true),
         )
         .arg(
+            Arg::with_name("number")
+                .short("n")
+                .long("number")
+                .value_name("AMOUNT")
+                .help("Amount of gifs to retreive")
+                .takes_value(true)
+                .default_value("1")
+                .required(true)
+                .validator(is_positive_number),
+        )
+        .arg(
             Arg::with_name("markdown")
                 .short("m")
                 .long("markdown")
@@ -44,9 +62,8 @@ fn main() {
 
     let api_key = matches.value_of("api_key").unwrap();
     let rating = matches.value_of("rating").unwrap();
+    let number_of_gifs: usize = matches.value_of("number").unwrap().parse().unwrap();
     let show_markdown = matches.is_present("markdown");
-
-    //let query = matches.value_of("query");
 
     let result = match matches.value_of("query") {
         Some(query) => giphy::search(&api_key, &query, &rating),
@@ -58,25 +75,28 @@ fn main() {
         Ok(giphys) => (giphys),
     };
 
-    if gifs.len() == 0 {
-        panic!("Giphy returned 0 results");
+    if gifs.len() < number_of_gifs {
+        panic!("Giphy returned not enough results");
     }
 
-    let index: usize = thread_rng().gen_range(0, gifs.len());
+    for _ in 0..number_of_gifs {
+        // TODO ensure that we return a different image each time
+        let index: usize = thread_rng().gen_range(0, gifs.len());
 
-    let image = match gifs[index].images.get("original") {
-        Some(image) => image,
-        _ => panic!("Unable to extract original image"),
-    };
+        let image = match gifs[index].images.get("original") {
+            Some(image) => image,
+            _ => panic!("Unable to extract original image"),
+        };
 
-    let url = match &image.url {
-        Some(image) => image,
-        _ => panic!("Unable to get image URL"),
-    };
+        let url = match &image.url {
+            Some(image) => image,
+            _ => panic!("Unable to get image URL"),
+        };
 
-    if show_markdown {
-        print!("![R+]({})", url);
-    } else {
-        print!("{}", url);
+        if show_markdown {
+            println!("![R+]({})", url);
+        } else {
+            println!("{}", url);
+        }
     }
 }
