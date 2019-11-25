@@ -1,5 +1,6 @@
 use clap::{App, Arg};
 use rand::{thread_rng, Rng};
+use std::collections::HashSet;
 
 mod giphy;
 
@@ -79,8 +80,10 @@ fn main() {
         panic!("Giphy returned not enough results");
     }
 
-    for _ in 0..number_of_gifs {
-        // TODO ensure that we return a different image each time
+    let mut urls = HashSet::new();
+
+    // Not a super efficient way of doing this 🤷‍♀️
+    while urls.len() < number_of_gifs {
         let index: usize = thread_rng().gen_range(0, gifs.len());
 
         let image = match gifs[index].images.get("original") {
@@ -93,6 +96,12 @@ fn main() {
             _ => panic!("Unable to get image URL"),
         };
 
+        if !urls.contains(url) {
+            urls.insert(url);
+        }
+    }
+
+    for url in urls {
         if show_markdown {
             println!("![R+]({})", url);
         } else {
