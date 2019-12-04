@@ -57,7 +57,7 @@ fn main() {
     let config = read_config(&config_path);
 
     let matches = App::new("Giphy")
-        .version("0.2.2")
+        .version("0.3.0")
         .author("Michael Enger <michaelenger@live.com>")
         .about("Searches giphy.com for an appropriate gif")
         .arg(
