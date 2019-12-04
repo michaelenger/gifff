@@ -134,7 +134,7 @@ fn main() {
         panic!("Giphy did not return enough results");
     }
 
-    for _ in 0..amount_of_gifs {
+    for i in 0..amount_of_gifs {
         let index: usize = thread_rng().gen_range(0, gifs.len());
 
         let giphy = gifs.swap_remove(index);
@@ -148,10 +148,14 @@ fn main() {
             _ => panic!("Unable to get image URL"),
         };
 
+        if i != 0 {
+            print!("\n");  // newline between results only
+        }
+
         if show_markdown {
-            println!("![R+]({})", url);
+            print!("![R+]({})", url);
         } else {
-            println!("{}", url);
+            print!("{}", url);
         }
     }
 }
