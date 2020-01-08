@@ -1,6 +1,8 @@
 use clap::{App, Arg};
 use rand::{thread_rng, Rng};
 
+static GIPHY_API_KEY: &str = "API KEY";
+
 mod giphy;
 
 /// Check whether a string is a positive number
@@ -23,7 +25,7 @@ fn main() {
                 .value_name("KEY")
                 .help("API key for communicating with Giphy")
                 .takes_value(true)
-                .required(true),
+                .required(false),
         )
         .arg(
             Arg::with_name("rating")
@@ -60,7 +62,12 @@ fn main() {
         )
         .get_matches();
 
-    let api_key = String::from(matches.value_of("api_key").unwrap());
+    let api_key = if matches.value_of("api_key").is_some() {
+        matches.value_of("api_key").unwrap()
+    } else {
+        GIPHY_API_KEY
+    };
+
     let rating = String::from(matches.value_of("rating").unwrap());
     let amount_of_gifs: usize = matches.value_of("amount").unwrap().parse().unwrap();
     let show_markdown = matches.is_present("markdown");

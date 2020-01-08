@@ -10,23 +10,22 @@ giphy "that one with the pitbull waddling down the stairs"
 
 ## Usage
 
-You will need an API key from [Giphy](https://developers.giphy.com/) which you
-pass in using the `--apikey` parameter.
+Pass in your search query to get a URL to a random appropriate gif:
 
 ```shell
-giphy --apikey "YOUR KEY HERE" search query goes here"
-```
-
-PROTIP: Pipe that 🔥 straight to `pbcopy` and paste into your favourite ~colleague harassment~ intra-office communication tool:
-
-```shell
-giphy "why the hell would you commit that??" | pbcopy
+giphy "something funny"
 ```
 
 Alternatively you can be basic and just get a random trending gif:
 
 ```shell
 giphy
+```
+
+PROTIP: Pipe that 🔥 straight to `pbcopy` and paste into your favourite ~colleague harassment~ intra-office communication tool:
+
+```shell
+giphy "why the hell would you commit that??" | pbcopy
 ```
 
 ### Options
@@ -39,6 +38,12 @@ giphy
 * `--version` Prints version information
 
 ## Development
+
+You will need an API key from [Giphy](https://developers.giphy.com/) which you pass in using the `--apikey` parameter, or put into the `GIPHY_API_KEY` variable.
+
+```rust
+static GIPHY_API_KEY: &str = "API KEY";
+```
 
 ### Requirements
 
