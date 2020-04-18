@@ -30,7 +30,6 @@ giphy "why the hell would you commit that??" | pbcopy
 
 ### Options
 
-* `--amount <AMOUNT>` how many gifs to retrieve
 * `--apikey <KEY>` specify the API key
 * `--help` Show help text
 * `--markdown` Wrap the URL in some markdown - useful for saying 👍 to pull requests
