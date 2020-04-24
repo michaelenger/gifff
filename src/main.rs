@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::fs::File;
-use std::io::BufReader;
 use std::io::prelude::*;
+use std::io::BufReader;
 
 use clap::{App, Arg};
 use rand::{thread_rng, Rng};
@@ -34,8 +34,8 @@ fn read_history() -> HashSet<String> {
                 if !id.is_empty() {
                     history.insert(id);
                 }
-            },
-            Err(_) => {},
+            }
+            Err(_) => {}
         }
     }
 
@@ -62,8 +62,8 @@ fn write_history(history: &HashSet<String>) {
         let mut id = id.to_owned();
         id.push_str("\n");
         match file.write_all(id.as_bytes()) {
-            Ok(_) => {},
-            Err(_) => {}, // we don't care if it fails
+            Ok(_) => {}
+            Err(_) => {} // we don't care if it fails
         }
     }
 }
@@ -106,6 +106,12 @@ fn main() {
                 .help("Do not filter out gifs that have already been seen"),
         )
         .arg(
+            Arg::with_name("clear_history")
+                .short("c")
+                .long("clear-history")
+                .help("Clear the existing history"),
+        )
+        .arg(
             Arg::with_name("query")
                 .help("Text to use when searching for a gif")
                 .index(1),
@@ -121,6 +127,10 @@ fn main() {
     let rating = String::from(matches.value_of("rating").unwrap());
     let show_markdown = matches.is_present("markdown");
     let ignore_history = matches.is_present("ignore_history");
+
+    if matches.is_present("clear_history") {
+        write_history(&HashSet::<String>::new()); // kinda dirty solution, but 🤷‍♀️
+    }
 
     let mut history = read_history();
 

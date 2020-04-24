@@ -34,6 +34,7 @@ The utility keeps track of which gifs have already been seen in a file in the ho
 
 * `--apikey <KEY>` Specify the API key
 * `--ignore-history` Do not filter out previously seen gifs
+* `--clear-history` Clear the existing history of gifs
 * `--help` Show help text
 * `--markdown` Wrap the URL in some markdown - useful for saying 👍 to pull requests
 * `--rating <RATING>` specify the rating of the gif (based on the [rating list](https://developers.giphy.com/docs/optional-settings/#rating))
