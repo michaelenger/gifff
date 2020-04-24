@@ -127,6 +127,17 @@ fn main() {
         Ok(giphys) => (giphys),
     };
 
+    // TODO replace with drain_filter when/if available.
+    // Ref: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.drain_filter
+    let mut i = 0;
+    while i != gifs.len() {
+        if history.contains(&gifs[i].id) {
+            gifs.remove(i);
+        } else {
+            i += 1;
+        }
+    }
+
     if gifs.len() < 1 {
         panic!("Giphy did not return enough results");
     }
