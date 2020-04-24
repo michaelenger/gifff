@@ -70,7 +70,7 @@ fn write_history(history: &HashSet<String>) {
 
 fn main() {
     let matches = App::new("Giphy")
-        .version("0.4.0")
+        .version("1.0.0")
         .author("Michael Enger <michaelenger@live.com>")
         .about("Searches giphy.com for an appropriate gif")
         .arg(

@@ -3,9 +3,9 @@
 Get the URL for a random gif from [Giphy](https://giphy.com/) based on a search query:
 
 ```shell
-giphy "old white guy dabbing"
+giphy "betty white dab"
 giphy "sadness"
-giphy "that one with the pitbull waddling down the stairs"
+giphy "🦑"
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ Alternatively you can be basic and just get a random trending gif:
 giphy
 ```
 
-PROTIP: Pipe that 🔥 straight to `pbcopy` and paste into your favourite ~colleague harassment~ intra-office communication tool:
+**PROTIP**: Pipe that 🔥 straight to `pbcopy` and paste into your favourite ~colleague harassment~ intra-office communication tool:
 
 ```shell
 giphy "why the hell would you commit that??" | pbcopy
@@ -51,7 +51,3 @@ static GIPHY_API_KEY: &str = "API KEY";
 ### Requirements
 
 * Rust 1.38
-
-### TODO
-
-* Allow for outputting a different quality URL
