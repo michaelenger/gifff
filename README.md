@@ -28,9 +28,12 @@ PROTIP: Pipe that 🔥 straight to `pbcopy` and paste into your favourite ~colle
 giphy "why the hell would you commit that??" | pbcopy
 ```
 
+The utility keeps track of which gifs have already been seen in a file in the home directory called `.giphy_history` so that you won't face the embarassment of pasting the same reaction twice.
+
 ### Options
 
-* `--apikey <KEY>` specify the API key
+* `--apikey <KEY>` Specify the API key
+* `--ignore-history` Do not filter out previously seen gifs
 * `--help` Show help text
 * `--markdown` Wrap the URL in some markdown - useful for saying 👍 to pull requests
 * `--rating <RATING>` specify the rating of the gif (based on the [rating list](https://developers.giphy.com/docs/optional-settings/#rating))
@@ -50,5 +53,4 @@ static GIPHY_API_KEY: &str = "API KEY";
 
 ### TODO
 
-* Keep a cache of previously used gifs and avoid duplicates
 * Allow for outputting a different quality URL

@@ -100,6 +100,12 @@ fn main() {
                 .help("Wraps the resulting URL in some markdown"),
         )
         .arg(
+            Arg::with_name("ignore_history")
+                .short("i")
+                .long("ignore-history")
+                .help("Do not filter out gifs that have already been seen"),
+        )
+        .arg(
             Arg::with_name("query")
                 .help("Text to use when searching for a gif")
                 .index(1),
@@ -114,6 +120,7 @@ fn main() {
 
     let rating = String::from(matches.value_of("rating").unwrap());
     let show_markdown = matches.is_present("markdown");
+    let ignore_history = matches.is_present("ignore_history");
 
     let mut history = read_history();
 
@@ -127,14 +134,16 @@ fn main() {
         Ok(giphys) => (giphys),
     };
 
-    // TODO replace with drain_filter when/if available.
-    // Ref: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.drain_filter
-    let mut i = 0;
-    while i != gifs.len() {
-        if history.contains(&gifs[i].id) {
-            gifs.remove(i);
-        } else {
-            i += 1;
+    if !ignore_history {
+        // TODO replace with drain_filter when/if available.
+        // Ref: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.drain_filter
+        let mut i = 0;
+        while i != gifs.len() {
+            if history.contains(&gifs[i].id) {
+                gifs.remove(i);
+            } else {
+                i += 1;
+            }
         }
     }
 
@@ -143,7 +152,6 @@ fn main() {
     }
 
     let index: usize = thread_rng().gen_range(0, gifs.len());
-
     let giphy = gifs.swap_remove(index);
 
     let image = match giphy.images.get("original") {
@@ -156,8 +164,10 @@ fn main() {
         _ => panic!("Unable to get image URL"),
     };
 
-    history.insert(giphy.id);
-    write_history(&history);
+    if !ignore_history {
+        history.insert(giphy.id);
+        write_history(&history);
+    }
 
     if show_markdown {
         print!("![R+]({})", url);
