@@ -24,6 +24,7 @@ pub struct Image {
 #[derive(Deserialize, Debug)]
 /// A Giphy gif
 pub struct Giphy {
+    pub id: String,
     pub images: HashMap<String, Image>,
 }
 
