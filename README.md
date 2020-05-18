@@ -1,11 +1,11 @@
-# Giphy
+# gifff
 
-Get the URL for a random gif from [Giphy](https://giphy.com/) based on a search query:
+Get the URL for a random gif from based on a search term:
 
 ```shell
-giphy "betty white dab"
-giphy "sadness"
-giphy "🦑"
+gifff "betty white dab"
+gifff "sadness"
+gifff "🦑"
 ```
 
 ## Usage
@@ -13,22 +13,22 @@ giphy "🦑"
 Pass in your search query to get a URL to a random appropriate gif:
 
 ```shell
-giphy "something funny"
+gifff "something funny"
 ```
 
 Alternatively you can be basic and just get a random trending gif:
 
 ```shell
-giphy
+gifff
 ```
 
 **PROTIP**: Pipe that 🔥 straight to `pbcopy` and paste into your favourite ~colleague harassment~ intra-office communication tool:
 
 ```shell
-giphy "why the hell would you commit that??" | pbcopy
+gifff "why the hell would you commit that??" | pbcopy
 ```
 
-The utility keeps track of which gifs have already been seen in a file in the home directory called `.giphy_history` so that you won't face the embarassment of pasting the same reaction twice.
+The utility keeps track of which gifs have already been seen in a file in the home directory called `.gifff_history` so that you won't face the embarassment of pasting the same reaction twice.
 
 ### Options
 

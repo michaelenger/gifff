@@ -7,6 +7,7 @@ use clap::{App, Arg};
 use rand::{thread_rng, Rng};
 
 static GIPHY_API_KEY: &str = "API KEY";
+static HISTORY_FILE: &str = ".gifff_history";
 
 mod giphy;
 
@@ -20,7 +21,7 @@ fn read_history() -> HashSet<String> {
     }
 
     let mut path = home_dir.unwrap();
-    path.push(".giphy_history");
+    path.push(HISTORY_FILE);
 
     let file = File::open(path);
     if !file.is_ok() {
@@ -50,7 +51,7 @@ fn write_history(history: &HashSet<String>) {
     }
 
     let mut path = home_dir.unwrap();
-    path.push(".giphy_history");
+    path.push(HISTORY_FILE);
 
     let file = File::create(path);
     if !file.is_ok() {
@@ -69,8 +70,8 @@ fn write_history(history: &HashSet<String>) {
 }
 
 fn main() {
-    let matches = App::new("Giphy")
-        .version("1.0.0")
+    let matches = App::new("gifff")
+        .version("1.1.0")
         .author("Michael Enger <michaelenger@live.com>")
         .about("Searches giphy.com for an appropriate gif")
         .arg(
