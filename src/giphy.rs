@@ -6,6 +6,8 @@ use reqwest::StatusCode;
 use reqwest::Url;
 use serde::Deserialize;
 
+static GIPHY_API_KEY: &str = "API KEY";
+
 #[derive(Deserialize, Debug)]
 /// An image
 pub struct Image {
@@ -71,11 +73,11 @@ fn get(url: Url) -> Result<Vec<Giphy>, Box<dyn Error>> {
 }
 
 /// Search Giphy for gifs specified by the query
-pub fn search(api_key: &str, query: &str, rating: &str) -> Result<Vec<Giphy>, Box<dyn Error>> {
+pub fn search(query: &str, rating: &str) -> Result<Vec<Giphy>, Box<dyn Error>> {
     let url = Url::parse_with_params(
         "https://api.giphy.com/v1/gifs/search",
         &[
-            ("api_key", api_key),
+            ("api_key", GIPHY_API_KEY),
             ("q", query),
             ("limit", "420"),
             ("rating", rating),
@@ -87,10 +89,10 @@ pub fn search(api_key: &str, query: &str, rating: &str) -> Result<Vec<Giphy>, Bo
 }
 
 /// Get recent trending Giphys
-pub fn trending(api_key: &str, rating: &str) -> Result<Vec<Giphy>, Box<dyn Error>> {
+pub fn trending(rating: &str) -> Result<Vec<Giphy>, Box<dyn Error>> {
     let url = Url::parse_with_params(
         "https://api.giphy.com/v1/gifs/trending",
-        &[("api_key", api_key), ("limit", "420"), ("rating", rating)],
+        &[("api_key", GIPHY_API_KEY), ("limit", "420"), ("rating", rating)],
     )
     .unwrap();
 

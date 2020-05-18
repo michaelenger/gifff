@@ -6,7 +6,6 @@ use std::io::BufReader;
 use clap::{App, Arg};
 use rand::{thread_rng, Rng};
 
-static GIPHY_API_KEY: &str = "API KEY";
 static HISTORY_FILE: &str = ".gifff_history";
 
 mod giphy;
@@ -75,15 +74,6 @@ fn main() {
         .author("Michael Enger <michaelenger@live.com>")
         .about("Searches giphy.com for an appropriate gif")
         .arg(
-            Arg::with_name("api_key")
-                .short("k")
-                .long("apikey")
-                .value_name("KEY")
-                .help("API key for communicating with Giphy")
-                .takes_value(true)
-                .required(false),
-        )
-        .arg(
             Arg::with_name("rating")
                 .short("r")
                 .long("rating")
@@ -119,12 +109,6 @@ fn main() {
         )
         .get_matches();
 
-    let api_key = if matches.value_of("api_key").is_some() {
-        matches.value_of("api_key").unwrap()
-    } else {
-        GIPHY_API_KEY
-    };
-
     let rating = String::from(matches.value_of("rating").unwrap());
     let show_markdown = matches.is_present("markdown");
     let ignore_history = matches.is_present("ignore_history");
@@ -136,8 +120,8 @@ fn main() {
     let mut history = read_history();
 
     let result = match matches.value_of("query") {
-        Some(query) => giphy::search(&api_key, &query, &rating),
-        None => giphy::trending(&api_key, &rating),
+        Some(query) => giphy::search(&query, &rating),
+        None => giphy::trending(&rating),
     };
 
     let mut gifs = match result {

@@ -32,7 +32,6 @@ The utility keeps track of which gifs have already been seen in a file in the ho
 
 ### Options
 
-* `--apikey <KEY>` Specify the API key
 * `--ignore-history` Do not filter out previously seen gifs
 * `--clear-history` Clear the existing history of gifs
 * `--help` Show help text
