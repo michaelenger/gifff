@@ -81,6 +81,33 @@ fn get_access_token() -> Result<String, Box<dyn Error>> {
     }
 }
 
+/// Search for gifs specified by the query
+pub fn search(query: &str) -> Result<Vec<GfycatImage>, Box<dyn Error>> {
+	let access_token = get_access_token()?;
+
+    let url = Url::parse_with_params(
+        "https://api.gfycat.com/v1/gfycats/search",
+        &[
+            ("search_text", query),
+            ("count", "420"),
+        ],
+    )?;
+
+    let client = Client::new();
+	let mut response = client.get(url).bearer_auth(&access_token).send()?;
+
+	match response.status() {
+        StatusCode::OK => {
+            let body: GifsResponse = response.json()?;
+            Ok(body.gfycats)
+        }
+        _ => {
+            let body: ErrorResponse = response.json()?;
+            Err(Box::new(body.error_message))
+        }
+    }
+}
+
 /// Get recent trending gifs
 pub fn trending() -> Result<Vec<GfycatImage>, Box<dyn Error>> {
 	let access_token = get_access_token()?;
