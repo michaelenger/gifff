@@ -17,8 +17,23 @@ struct AccessTokenRequest<'a> {
 
 /// Contents of an access token response
 #[derive(Debug, Deserialize)]
-pub struct AccessTokenReponse {
+struct AccessTokenReponse {
 	access_token: String,
+}
+
+/// A single image from Gfycat
+#[derive(Debug, Deserialize)]
+pub struct GfycatImage {
+	#[serde(rename = "gfyId")]
+	id: String,
+	#[serde(rename = "gifUrl")]
+	url: String,
+}
+
+/// Contents of a gif response
+#[derive(Debug, Deserialize)]
+pub struct GifsResponse {
+	gfycats: Vec<GfycatImage>
 }
 
 /// Error from Gfycat
@@ -42,8 +57,8 @@ struct ErrorResponse {
 	error_message: GfycatError,
 }
 
-/// Retrieve a result from Gfycat
-pub fn get_access_token() -> Result<AccessTokenReponse, Box<dyn Error>> {
+/// Retrieve the access token from Gfycat
+fn get_access_token() -> Result<String, Box<dyn Error>> {
 	let url = Url::parse("https://api.gfycat.com/v1/oauth/token")?;
 	let body = AccessTokenRequest{
 		client_id: GFYCAT_CLIENT_ID,
@@ -57,7 +72,31 @@ pub fn get_access_token() -> Result<AccessTokenReponse, Box<dyn Error>> {
     match response.status() {
         StatusCode::OK => {
             let body: AccessTokenReponse = response.json()?;
-            Ok(body)
+            Ok(body.access_token)
+        }
+        _ => {
+            let body: ErrorResponse = response.json()?;
+            Err(Box::new(body.error_message))
+        }
+    }
+}
+
+/// Get recent trending gifs
+pub fn trending() -> Result<Vec<GfycatImage>, Box<dyn Error>> {
+	let access_token = get_access_token()?;
+
+	let url = Url::parse_with_params(
+        "https://api.gfycat.com/v1/gfycats/trending",
+        &[("count", "420")],
+    )?;
+
+    let client = Client::new();
+	let mut response = client.get(url).bearer_auth(&access_token).send()?;
+
+	match response.status() {
+        StatusCode::OK => {
+            let body: GifsResponse = response.json()?;
+            Ok(body.gfycats)
         }
         _ => {
             let body: ErrorResponse = response.json()?;
