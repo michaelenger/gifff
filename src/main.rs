@@ -10,7 +10,6 @@ use rand::{thread_rng, Rng};
 static HISTORY_FILE: &str = ".gifff_history";
 
 mod gfycat;
-mod giphy;
 
 /// Read the history file
 fn read_history() -> HashSet<String> {
@@ -74,7 +73,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let matches = App::new("gifff")
         .version("1.1.0")
         .author("Michael Enger <michaelenger@live.com>")
-        .about("Searches giphy.com for an appropriate gif")
+        .about("Searches the web for an appropriate gif")
         .arg(
             Arg::with_name("markdown")
                 .short("m")
@@ -109,15 +108,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut history = read_history();
 
-    let result = match matches.value_of("query") {
+    let mut gifs = match matches.value_of("query") {
         Some(query) => gfycat::search(&query),
         None => gfycat::trending(),
-    };
-
-    let mut gifs = match result {
-        Err(e) => panic!("Failed to retrieve gifs: {}", e),
-        Ok(giphys) => (giphys),
-    };
+    }?;
 
     if !ignore_history {
         // TODO replace with drain_filter when/if available.
@@ -133,7 +127,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     if gifs.len() < 1 {
-        panic!("Giphy did not return enough results");
+        panic!("Could not find any gifs");
     }
 
     let index: usize = thread_rng().gen_range(0, gifs.len());
