@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
@@ -8,6 +9,7 @@ use rand::{thread_rng, Rng};
 
 static HISTORY_FILE: &str = ".gifff_history";
 
+mod gfycat;
 mod giphy;
 
 /// Read the history file
@@ -68,7 +70,7 @@ fn write_history(history: &HashSet<String>) {
     }
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn Error>> {
     let matches = App::new("gifff")
         .version("1.1.0")
         .author("Michael Enger <michaelenger@live.com>")
@@ -120,8 +122,8 @@ fn main() {
     let mut history = read_history();
 
     let result = match matches.value_of("query") {
-        Some(query) => giphy::search(&query, &rating),
-        None => giphy::trending(&rating),
+        Some(query) => gfycat::search(&query),
+        None => gfycat::trending(),
     };
 
     let mut gifs = match result {
@@ -147,26 +149,18 @@ fn main() {
     }
 
     let index: usize = thread_rng().gen_range(0, gifs.len());
-    let giphy = gifs.swap_remove(index);
-
-    let image = match giphy.images.get("original") {
-        Some(image) => image,
-        _ => panic!("Unable to extract original image"),
-    };
-
-    let url = match &image.url {
-        Some(image) => image,
-        _ => panic!("Unable to get image URL"),
-    };
+    let gif = gifs.swap_remove(index);
 
     if !ignore_history {
-        history.insert(giphy.id);
+        history.insert(gif.id);
         write_history(&history);
     }
 
     if show_markdown {
-        print!("![R+]({})", url);
+        print!("![R+]({})", gif.url);
     } else {
-        print!("{}", url);
+        print!("{}", gif.url);
     }
+
+    Ok(())
 }
