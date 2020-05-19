@@ -36,7 +36,6 @@ The utility keeps track of which gifs have already been seen in a file in the ho
 * `--clear-history` Clear the existing history of gifs
 * `--help` Show help text
 * `--markdown` Wrap the URL in some markdown - useful for saying 👍 to pull requests
-* `--rating <RATING>` specify the rating of the gif (based on the [rating list](https://developers.giphy.com/docs/optional-settings/#rating))
 * `--version` Prints version information
 
 ## Development

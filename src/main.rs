@@ -76,17 +76,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         .author("Michael Enger <michaelenger@live.com>")
         .about("Searches giphy.com for an appropriate gif")
         .arg(
-            Arg::with_name("rating")
-                .short("r")
-                .long("rating")
-                .value_name("RATING")
-                .help("Rating of the gifs to retrieve")
-                .takes_value(true)
-                .possible_values(&["g", "pg", "pg-13", "r"])
-                .default_value("g")
-                .required(true),
-        )
-        .arg(
             Arg::with_name("markdown")
                 .short("m")
                 .long("markdown")
@@ -111,7 +100,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         )
         .get_matches();
 
-    let rating = String::from(matches.value_of("rating").unwrap());
     let show_markdown = matches.is_present("markdown");
     let ignore_history = matches.is_present("ignore_history");
 
