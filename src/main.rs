@@ -71,7 +71,7 @@ fn write_history(history: &HashSet<String>) {
 
 fn main() -> Result<(), Box<dyn Error>> {
     let matches = App::new("gifff")
-        .version("1.1.0")
+        .version("1.2.0")
         .author("Michael Enger <michaelenger@live.com>")
         .about("Searches the web for an appropriate gif")
         .arg(

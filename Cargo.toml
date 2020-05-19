@@ -1,6 +1,6 @@
 [package]
 name = "gifff"
-version = "1.1.0"
+version = "1.2.0"
 authors = ["Michael Enger <michaelenger@live.com>"]
 edition = "2018"
 
