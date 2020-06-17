@@ -1,13 +1,13 @@
 [package]
 name = "gifff"
-version = "1.2.0"
+version = "1.2.1"
 authors = ["Michael Enger <michaelenger@live.com>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = "2.33"
+gumdrop = "0.8"
 dirs = "2.0"
 rand = "0.7"
 reqwest = "0.9"

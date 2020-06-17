@@ -4,12 +4,34 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 
-use clap::{App, Arg};
+use gumdrop::Options;
 use rand::{thread_rng, Rng};
 
+static VERSION_NUMBER: &str = "1.2.1";
 static HISTORY_FILE: &str = ".gifff_history";
 
 mod gfycat;
+
+#[derive(Debug, Options)]
+struct CliOptions {
+    #[options(free, help = "Text to use when searching for a gif")]
+    query: Option<String>,
+
+    #[options(help_flag)]
+    help: bool,
+
+    #[options(help = "Wraps the resulting URL in some markdown")]
+    markdown: bool,
+
+    #[options(help = "Do not filter out gifs that have already been seen")]
+    ignore_history: bool,
+
+    #[options(help = "Clear the existing history")]
+    clear_history: bool,
+
+    #[options(help = "Prints version information")]
+    version: bool,
+}
 
 /// Read the history file
 fn read_history() -> HashSet<String> {
@@ -70,50 +92,25 @@ fn write_history(history: &HashSet<String>) {
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let matches = App::new("gifff")
-        .version("1.2.0")
-        .author("Michael Enger <michaelenger@live.com>")
-        .about("Searches the web for an appropriate gif")
-        .arg(
-            Arg::with_name("markdown")
-                .short("m")
-                .long("markdown")
-                .help("Wraps the resulting URL in some markdown"),
-        )
-        .arg(
-            Arg::with_name("ignore_history")
-                .short("i")
-                .long("ignore-history")
-                .help("Do not filter out gifs that have already been seen"),
-        )
-        .arg(
-            Arg::with_name("clear_history")
-                .short("c")
-                .long("clear-history")
-                .help("Clear the existing history"),
-        )
-        .arg(
-            Arg::with_name("query")
-                .help("Text to use when searching for a gif")
-                .index(1),
-        )
-        .get_matches();
+    let opts = CliOptions::parse_args_default_or_exit();
 
-    let show_markdown = matches.is_present("markdown");
-    let ignore_history = matches.is_present("ignore_history");
+    if opts.version {
+        println!("gifff {}", VERSION_NUMBER);
+        return Ok(())
+    }
 
-    if matches.is_present("clear_history") {
+    if opts.clear_history {
         write_history(&HashSet::<String>::new()); // kinda dirty solution, but 🤷‍♀️
     }
 
     let mut history = read_history();
 
-    let mut gifs = match matches.value_of("query") {
+    let mut gifs = match opts.query {
         Some(query) => gfycat::search(&query),
         None => gfycat::trending(),
     }?;
 
-    if !ignore_history {
+    if !opts.ignore_history {
         // TODO replace with drain_filter when/if available.
         // Ref: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.drain_filter
         let mut i = 0;
@@ -133,12 +130,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     let index: usize = thread_rng().gen_range(0, gifs.len());
     let gif = gifs.swap_remove(index);
 
-    if !ignore_history {
+    if !opts.ignore_history {
         history.insert(gif.id);
         write_history(&history);
     }
 
-    if show_markdown {
+    if opts.markdown {
         print!("![R+]({})", gif.url);
     } else {
         print!("{}", gif.url);
