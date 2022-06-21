@@ -1,7 +1,8 @@
 use std::error::Error;
 use std::fmt;
 
-use reqwest::{Client, StatusCode, Url};
+use reqwest::{StatusCode, Url};
+use reqwest::blocking::{Client};
 use serde::{Deserialize, Serialize};
 
 static GFYCAT_CLIENT_ID: &str = "CLIENT ID";
@@ -67,7 +68,7 @@ fn get_access_token() -> Result<String, Box<dyn Error>> {
     };
 
     let client = Client::new();
-    let mut response = client.post(url).json(&body).send()?;
+    let response = client.post(url).json(&body).send()?;
 
     match response.status() {
         StatusCode::OK => {
@@ -91,7 +92,7 @@ pub fn search(query: &str) -> Result<Vec<GfycatImage>, Box<dyn Error>> {
     )?;
 
     let client = Client::new();
-    let mut response = client.get(url).bearer_auth(&access_token).send()?;
+    let response = client.get(url).bearer_auth(&access_token).send()?;
 
     match response.status() {
         StatusCode::OK => {
@@ -115,7 +116,7 @@ pub fn trending() -> Result<Vec<GfycatImage>, Box<dyn Error>> {
     )?;
 
     let client = Client::new();
-    let mut response = client.get(url).bearer_auth(&access_token).send()?;
+    let response = client.get(url).bearer_auth(&access_token).send()?;
 
     match response.status() {
         StatusCode::OK => {

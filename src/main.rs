@@ -7,7 +7,7 @@ use std::io::BufReader;
 use gumdrop::Options;
 use rand::{thread_rng, Rng};
 
-static VERSION_NUMBER: &str = "1.2.1";
+static VERSION_NUMBER: &str = "1.2.2";
 static HISTORY_FILE: &str = ".gifff_history";
 
 mod gfycat;
@@ -127,7 +127,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         panic!("Could not find any gifs");
     }
 
-    let index: usize = thread_rng().gen_range(0, gifs.len());
+    let index: usize = thread_rng().gen_range(0..gifs.len());
     let gif = gifs.swap_remove(index);
 
     if !opts.ignore_history {
