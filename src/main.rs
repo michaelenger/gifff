@@ -7,7 +7,7 @@ use std::io::BufReader;
 use gumdrop::Options;
 use rand::{thread_rng, Rng};
 
-static VERSION_NUMBER: &str = "1.2.2";
+static VERSION_NUMBER: &str = "1.2.3";
 static HISTORY_FILE: &str = ".gifff_history";
 
 mod gfycat;

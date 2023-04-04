@@ -1,6 +1,6 @@
 [package]
 name = "gifff"
-version = "1.2.2"
+version = "1.2.3"
 authors = ["Michael Enger <michaelenger@live.com>"]
 edition = "2021"
 
@@ -8,7 +8,7 @@ edition = "2021"
 
 [dependencies]
 gumdrop = "0.8"
-dirs = "4.0"
+dirs = "5.0"
 rand = "0.8"
 reqwest = { version = "0.11", features = ["blocking", "json"] }
 serde = { version = "1.0", features = ["derive"] }
