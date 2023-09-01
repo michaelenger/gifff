@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::env;
 use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
@@ -7,10 +8,10 @@ use std::io::BufReader;
 use gumdrop::Options;
 use rand::{thread_rng, Rng};
 
-static VERSION_NUMBER: &str = "1.2.3";
+static VERSION_NUMBER: &str = "1.3.0";
 static HISTORY_FILE: &str = ".gifff_history";
 
-mod gfycat;
+mod giphy;
 
 #[derive(Debug, Options)]
 struct CliOptions {
@@ -96,7 +97,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     if opts.version {
         println!("gifff {}", VERSION_NUMBER);
-        return Ok(())
+        return Ok(());
     }
 
     if opts.clear_history {
@@ -105,9 +106,14 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut history = read_history();
 
+    let api_key = match env::var("GIPHY_API_KEY") {
+        Ok(val) => val,
+        Err(_) => panic!("Missing GIPHY_API_KEY"),
+    };
+
     let mut gifs = match opts.query {
-        Some(query) => gfycat::search(&query),
-        None => gfycat::trending(),
+        Some(query) => giphy::search(api_key.as_str(), &query),
+        None => giphy::trending(api_key.as_str()),
     }?;
 
     if !opts.ignore_history {
