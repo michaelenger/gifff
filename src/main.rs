@@ -7,10 +7,10 @@ use std::io::BufReader;
 use gumdrop::Options;
 use rand::{thread_rng, Rng};
 
-static VERSION_NUMBER: &str = "1.2.3";
+static VERSION_NUMBER: &str = "1.2.4";
 static HISTORY_FILE: &str = ".gifff_history";
 
-mod gfycat;
+mod giphy;
 
 #[derive(Debug, Options)]
 struct CliOptions {
@@ -96,7 +96,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     if opts.version {
         println!("gifff {}", VERSION_NUMBER);
-        return Ok(())
+        return Ok(());
     }
 
     if opts.clear_history {
@@ -106,8 +106,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut history = read_history();
 
     let mut gifs = match opts.query {
-        Some(query) => gfycat::search(&query),
-        None => gfycat::trending(),
+        Some(query) => giphy::search(&query),
+        None => giphy::trending(),
     }?;
 
     if !opts.ignore_history {

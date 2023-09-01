@@ -40,11 +40,10 @@ The utility keeps track of which gifs have already been seen in a file in the ho
 
 ## Development
 
-You will need a client ID and secret from [Gfycat](https://developers.gfycat.com/) which you put into the `GFYCAT_CLIENT_ID` and `GFYCAT_CLIENT_SECRET` variables.
+You will need an API key from [Giphy](https://developers.giphy.com/) which you put into the `GIPHY_API_KEY` variable.
 
 ```rust
-static GFYCAT_CLIENT_ID: &str = "CLIENT ID";
-static GFYCAT_CLIENT_SECRET: &str = "CLIENT SECRET";
+static GIPHY_API_KEY: &str = "YOUR API KEY";
 ```
 
 ### Requirements
