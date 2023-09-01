@@ -10,6 +10,12 @@ gifff "🦑"
 
 ## Usage
 
+You will need an API key from [Giphy](https://developers.giphy.com/) which you store in an environment variable called `GIPHY_API_KEY`:
+
+```shell
+export GIPHY_API_KEY="YOUR API KEY"
+```
+
 Pass in your search query to get a URL to a random appropriate gif:
 
 ```shell
@@ -37,14 +43,6 @@ The utility keeps track of which gifs have already been seen in a file in the ho
 * `--help` Show help text
 * `--markdown` Wrap the URL in some markdown - useful for saying 👍 to pull requests
 * `--version` Prints version information
-
-## Development
-
-You will need an API key from [Giphy](https://developers.giphy.com/) which you put into the `GIPHY_API_KEY` variable.
-
-```rust
-static GIPHY_API_KEY: &str = "YOUR API KEY";
-```
 
 ### Requirements
 

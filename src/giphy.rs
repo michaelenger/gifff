@@ -4,8 +4,6 @@ use reqwest::blocking::Client;
 use reqwest::{StatusCode, Url};
 use serde::Deserialize;
 
-static GIPHY_API_KEY: &str = "";
-
 /// Error from Giphy
 #[derive(Debug, Deserialize)]
 struct GiphyError {
@@ -85,20 +83,20 @@ fn make_request(url: Url) -> Result<Vec<GifImage>, Box<dyn Error>> {
 }
 
 /// Search for gifs specified by the query
-pub fn search(query: &str) -> Result<Vec<GifImage>, Box<dyn Error>> {
+pub fn search(api_key: &str, query: &str) -> Result<Vec<GifImage>, Box<dyn Error>> {
     let url = Url::parse_with_params(
         "https://api.giphy.com/v1/gifs/trending",
-        &[("api_key", GIPHY_API_KEY), ("limit", "50"), ("q", query)],
+        &[("api_key", api_key), ("limit", "50"), ("q", query)],
     )?;
 
     make_request(url)
 }
 
 /// Get recent trending gifs
-pub fn trending() -> Result<Vec<GifImage>, Box<dyn Error>> {
+pub fn trending(api_key: &str) -> Result<Vec<GifImage>, Box<dyn Error>> {
     let url = Url::parse_with_params(
         "https://api.giphy.com/v1/gifs/trending",
-        &[("api_key", GIPHY_API_KEY), ("limit", "50")],
+        &[("api_key", api_key), ("limit", "50")],
     )?;
 
     make_request(url)
